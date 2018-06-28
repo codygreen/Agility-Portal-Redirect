@@ -1,0 +1,23 @@
+{
+  "name": "agility-portal-redirect",
+  "version": "1.0.0",
+  "description": "F5 Agility Training Portal Redirect",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/unit test/integration",
+    "test:unit": "mocha test/unit",
+    "test:int": "mocha test/integration"
+  },
+  "author": "c.green@f5.com",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^6.0.0",
+    "mocha": "^5.2.0",
+    "proxyquire": "^2.0.1"
+  },
+  "dependencies": {
+    "ravello-js": "file:../ravello-js"
+  }
+}
