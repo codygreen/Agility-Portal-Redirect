@@ -76,32 +76,22 @@ class RavelloClasses {
                         return resolve(res.filter(c => c.status === status));
                         break;
                     }
-                    // case 'accessible': {
-                    //     // return anything that is not inactive
-                    //     return resolve(res.filter(c => c.status !== 'INACCESSIBLE'));
-                    //     // res.map(x => {
-                    //     //     if(x.status !== 'INACCESSIBLE') {
-                    //     //         payload.push(x);
-                    //     //     }
-                    //     // });
-                    //     // return resolve(payload);
-                    //     break;
-                    // }
-                    // case 'inaccessible': {
-                    //     // return inactive classes
-                    //     return resolve(res.filter(c => c.status === 'INACCESSIBLE'));
-                    //     break;
-                    // }
-                    // default:  {
-                    //     // return all classes
-                    //     return resolve(res);
-                    //     break;
-                    // }
                 };
 
             }).catch((err) => {
                 console.error('ERROR GET CLASSES: ' + err);
                 reject(err);
+            });
+        });
+    }
+
+    getClassStudents(classId = null) {
+        return new Promise((resolve, reject) => {
+            if(classId === null) 
+                return reject(new Error('ERROR: getClassStudents requires a classId'));
+
+            r.getClassStudents({classId}).then((res) => {
+                return resolve(res);
             });
         });
     }
