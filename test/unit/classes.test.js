@@ -79,8 +79,6 @@ describe('Unit Testing for RavelloClasses Class', function () {
         });
         return classes.processClasses()
             .then((res) => {
-                console.log('TEST2:');
-                console.log(res);
                 return res;
             })
             .catch((err) => {

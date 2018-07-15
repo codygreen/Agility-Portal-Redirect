@@ -151,6 +151,7 @@ class RavelloClasses {
                 classes.map(c => {
                     console.log('adding to promises:');
                     // determine class id
+                    console.log(c);
                     console.log(typeof(c.id));
                     // make sure the class ID is in the correct format
                     const classId = isNaN(c.id) ? c.id : c.id.toString(); 
