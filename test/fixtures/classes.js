@@ -43,14 +43,14 @@ const trainer = {
 
 module.exports.baseClasses = [
     {
-        "id": 1000000000000000000,
+        "id": "1000000000000000001",
         "creationTime": 1000000000000,
         "modificationTime": 1000000000000,
         "name": "Base Class A",
         ...course,
         "optimizationLevel": "COST_OPTIMIZED",
         "startTime": 1000000000000,
-        "endTime": 1000000000000,
+        "endTime": 1627198400000,
         "studentCount": "1",
         ...blueprints,
         ...costBucket,
@@ -60,14 +60,14 @@ module.exports.baseClasses = [
         "status": "INACCESSIBLE"
     },
     {
-        "id": 1000000000000000000,
+        "id": "1000000000000000002",
         "creationTime": 1000000000000,
         "modificationTime": 1000000000000,
         "name": "Base Class B",
         ...course,
         "optimizationLevel": "COST_OPTIMIZED",
         "startTime": 1000000000000,
-        "endTime": 10000000010000,
+        "endTime": 1627198400000,
         "studentCount": "1",
         ...blueprints,
         ...costBucket,
@@ -109,9 +109,9 @@ module.exports.baseClassUsers = [
         "creationTime": 1000000000000,
         "modificationTime": 1000000000000,
         "firstName": "mickey",
-        "lastName": "mouse",
+        "lastName": "1",
         "email": "m.mouse@email.com",
-        "classId": 1000000000000000000,
+        "classId": 1000000000000000001,
         applications
     },
     {
@@ -119,9 +119,9 @@ module.exports.baseClassUsers = [
         "creationTime": 1000000000000,
         "modificationTime": 1000000000000,
         "firstName": "minney",
-        "lastName": "mouse",
+        "lastName": "2",
         "email": "mi.mouse@email.com",
-        "classId": 1000000000000000000,
+        "classId": 1000000000000000001,
         applications
     },
     {
@@ -129,9 +129,9 @@ module.exports.baseClassUsers = [
         "creationTime": 1000000000000,
         "modificationTime": 1000000000000,
         "firstName": "mortimer",
-        "lastName": "mouse",
+        "lastName": "3",
         "email": "morty@email.com",
-        "classId": 1000000000000000000,
+        "classId": 1000000000000000001,
         applications
     },
 ];

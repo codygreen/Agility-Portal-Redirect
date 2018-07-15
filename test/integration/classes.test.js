@@ -13,69 +13,57 @@ chai.should();
 
 const f = require('../fixtures/classes');
 const RavelloClass = require('../../ravelloClasses');
-let classIds = [];
 
 describe('Integration Testing for RavelloClasses Class', function () {
-    this.timeout(5000);
-    it('Test getClasses', function () {
+    this.timeout(10000);
+    let classes = null;
+    before(function() {
         expect(process.env.DOMAIN).to.not.equal(undefined);
         expect(process.env.PASSWORD).to.not.equal(undefined);
         expect(process.env.USERNAME).to.not.equal(undefined);
         
-        const classes = new RavelloClass({
+        classes = new RavelloClass({
             domain: process.env.DOMAIN,
             password: process.env.PASSWORD,
             username: process.env.USERNAME,
         });
+    });
+    // it('Test getClasses', function () {
+    //     return classes.getClasses(classes.classesState.active)
+    //         .then((res) => {
+    //             console.log('TEST: ' + res[0].id);
+    //             console.log(res);
+    //             expect(res).to.not.be.empty;
+    //             expect(res[0]).to.include.keys('id');
+    //             expect(res[0]).to.include.keys('status');
+    //         });
+    // });
 
-        return classes.getClasses(classes.classesState.accessible)
+    // it('Test getClassStudents method', function() { 
+    //     expect(process.env.INTEGRATION_CLASS_ID).to.not.be.null;       
+    //     return classes.getClassStudents(process.env.INTEGRATION_CLASS_ID)
+    //         .then((res) => {
+    //             // make sure there are students for this class
+    //             expect(res).to.not.be.empty;
+    //             expect(res[0]).to.include.keys('id');
+    //             expect(res[0].applications).to.not.be.empty;
+    //             expect(res[0].applications[0]).to.include.keys('ephAccessToken');
+    //             expect(res[0].applications[0].ephAccessToken).to.include.keys('link');
+    //             expect(res[0].applications[0].ephAccessToken.link).to.contain.path('/simple/');
+    //         });
+    // });
+
+    it('Test processClasses method', function() {
+        return classes.processClasses()
             .then((res) => {
-                expect(res).to.not.be.empty;
-                expect(res[0]).to.include.keys('id');
-                expect(res[0]).to.include.keys('status');
-
-                //obtain a classId that has students
-                res.map(c => classIds.push(c.id));
-                expect(classIds).to.not.be.empty;
+                console.log('TEST2:');
+                console.log(res);
             });
     });
 
-    it('Test getClassStudents method', function() {
-        expect(process.env.DOMAIN).to.not.equal(undefined);
-        expect(process.env.PASSWORD).to.not.equal(undefined);
-        expect(process.env.USERNAME).to.not.equal(undefined);
-        expect(classIds).to.not.be.empty;
-
-        const classes = new RavelloClass({
-            domain: process.env.DOMAIN,
-            password: process.env.PASSWORD,
-            username: process.env.USERNAME,
-        });
-        
-        return classes.getClassStudents(classIds[0])
-            .then((res) => {
-                // make sure there are students for this class
-                if(res.length === 0) {
-                    expect(classIds.length).to.be.at.least(2);
-                    return classes.getClassStudents(classIds[1]);
-                } else {
-                    expect(res).to.not.be.empty;
-                    expect(res[0]).to.include.keys('id');
-                    expect(res[0].applications).to.not.be.empty;
-                    expect(res[0].applications[0]).to.include.keys('ephAccessToken');
-                    expect(res[0].applications[0].ephAccessToken).to.include.keys('link');
-                    expect(res[0].applications[0].ephAccessToken.link).to.contain.path('/simple/');
-                }
-            }).then((res) => {
-                // first class didn't have students so we're trying class2
-                expect(res).to.not.be.empty;
-                expect(res[0]).to.include.keys('id');
-                expect(res[0].applications).to.not.be.empty;
-                expect(res[0].applications[0]).to.include.keys('ephAccessToken');
-                expect(res[0].applications[0].ephAccessToken).to.include.keys('link');
-                expect(res[0].applications[0].ephAccessToken.link).to.contain.path('/simple/');
-            });
-    });
+    // it('Test setClassRedirectId method', function() {
+    //     return classes.setClassRedirectId(process.env.INTEGRATION_CLASS_ID).should.eventually.be.fulfilled;
+    // });
 });
 
 

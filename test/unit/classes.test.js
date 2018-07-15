@@ -19,6 +19,7 @@ let RavellojsMock = {};
 RavellojsMock.config = ({username, password, domain}) => {console.log('WTF')};
 RavellojsMock.getClasses = () => {return new Promise((resolve, reject) => resolve(f.baseClasses))};
 RavellojsMock.getClassStudents = ({classId}) => {return new Promise((resolve, reject) => resolve(f.baseClassUsers))};
+RavellojsMock.updateCache = () => {return new Promise((resolve, reject) => resolve(f.baseClasses))};
 
 describe('Unit Testing for RavelloClasses Class', function () {
     beforeEach(() => {
@@ -26,46 +27,64 @@ describe('Unit Testing for RavelloClasses Class', function () {
             'ravello-js' : RavellojsMock
         });
     });
-    it('Test getClasses method', function () {
-        expect(process.env.DOMAIN).to.not.equal(undefined);
-        expect(process.env.PASSWORD).to.not.equal(undefined);
-        expect(process.env.USERNAME).to.not.equal(undefined);
+    // it('Test getClasses method', function () {
+    //     expect(process.env.DOMAIN).to.not.equal(undefined);
+    //     expect(process.env.PASSWORD).to.not.equal(undefined);
+    //     expect(process.env.USERNAME).to.not.equal(undefined);
         
-        const classes = new RavelloClass({
-            domain: process.env.DOMAIN,
-            password: process.env.PASSWORD,
-            username: process.env.USERNAME,
-        });
+    //     const classes = new RavelloClass({
+    //         domain: process.env.DOMAIN,
+    //         password: process.env.PASSWORD,
+    //         username: process.env.USERNAME,
+    //     });
 
-        return Promise.all([
-            classes.getClasses(classes.classesState.accessible).should.eventually.have.length(1),
-            classes.getClasses(classes.classesState.accessible).should.eventually.deep.include(f.baseClasses[1]),
-            classes.getClasses(classes.classesState.inaccessible).should.eventually.have.length(1),
-            classes.getClasses(classes.classesState.inaccessible).should.eventually.deep.include(f.baseClasses[0]),
-            classes.getClasses().should.eventually.have.length(2),
-            classes.getClasses().should.eventually.equal(f.baseClasses)
-        ]);
-    });
-    it('Test getClassStudents method', function() {
-        expect(process.env.DOMAIN).to.not.equal(undefined);
-        expect(process.env.PASSWORD).to.not.equal(undefined);
-        expect(process.env.USERNAME).to.not.equal(undefined);
+    //     return Promise.all([
+    //         classes.getClasses(classes.classesState.accessible).should.eventually.have.length(1),
+    //         classes.getClasses(classes.classesState.accessible).should.eventually.deep.include(f.baseClasses[1]),
+    //         classes.getClasses(classes.classesState.inaccessible).should.eventually.have.length(1),
+    //         classes.getClasses(classes.classesState.inaccessible).should.eventually.deep.include(f.baseClasses[0]),
+    //         classes.getClasses().should.eventually.have.length(2),
+    //         classes.getClasses().should.eventually.equal(f.baseClasses)
+    //     ]);
+    // });
+    // it('Test getClassStudents method', function() {
+    //     expect(process.env.DOMAIN).to.not.equal(undefined);
+    //     expect(process.env.PASSWORD).to.not.equal(undefined);
+    //     expect(process.env.USERNAME).to.not.equal(undefined);
 
-        const classes = new RavelloClass({
-            domain: process.env.DOMAIN,
-            password: process.env.PASSWORD,
-            username: process.env.USERNAME,
-        });
+    //     const classes = new RavelloClass({
+    //         domain: process.env.DOMAIN,
+    //         password: process.env.PASSWORD,
+    //         username: process.env.USERNAME,
+    //     });
 
-        //return classes.getClassStudents({classId: 'asdfgh123456'}).should.eventually.be.fulfilled;
+    //     //return classes.getClassStudents({classId: 'asdfgh123456'}).should.eventually.be.fulfilled;
         
-        let promises = [];
-        return classes.getClassStudents({classId: 'asdfgh123456'})
-            .then((res) => {
-                res.should.be.equal(f.baseClassUsers);
-                console.log(res[0]);
-                expect(res[0].applications[0].ephAccessToken.link).to.contain.path('/simple/')
+    //     let promises = [];
+    //     return classes.getClassStudents({classId: 'asdfgh123456'})
+    //         .then((res) => {
+    //             res.should.be.equal(f.baseClassUsers);
+    //             console.log(res[0]);
+    //             expect(res[0].applications[0].ephAccessToken.link).to.contain.path('/simple/')
                 
+    //         });
+    // });
+
+    it('Test processClasses method', function() {
+        //this.timeout(5000);
+        const classes = new RavelloClass({
+            domain: process.env.DOMAIN,
+            password: process.env.PASSWORD,
+            username: process.env.USERNAME,
+        });
+        return classes.processClasses()
+            .then((res) => {
+                console.log('TEST2:');
+                console.log(res);
+                return res;
+            })
+            .catch((err) => {
+                throw new Error(err);
             });
     });
 });
