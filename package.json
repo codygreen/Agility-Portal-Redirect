@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "F5 Agility Training Portal Redirect",
   "main": "index.js",
+  "repository": "github:codygreen/Agility-Portal-Redirect",
   "scripts": {
     "test": "mocha test/unit test/integration",
     "test:unit": "mocha test/unit",
@@ -13,7 +14,6 @@
   "author": "c.green@f5.com",
   "license": "ISC",
   "devDependencies": {
-    "aws-sdk-mock": "^4.0.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-url": "^1.0.4",
@@ -23,14 +23,11 @@
     "proxyquire": "^2.0.1"
   },
   "dependencies": {
-    "aws-sdk": "^2.270.1",
-    "axios": "^0.18.0",
-    "bluebird": "^3.5.1",
     "crc": "^3.5.0",
     "express": "^4.16.3",
-    "ravello-js": "file:../ravello-js",
     "redis": "^2.8.0",
     "redis-mock": "^0.27.0",
-    "winston": "^3.0.0"
+    "winston": "^3.0.0",
+    "ravello-js": "codygreen/ravello-js"
   }
 }

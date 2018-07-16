@@ -67,7 +67,7 @@ class RavelloClasses {
                 return reject(new Error('getCache ERROR: key cannot be null'));
             }
 
-            const client = redis.createClient();
+            const client = redis.createClient(6379, config.redisSlave, {password: process.env.REDIS_PASSWORD});
             const getAsync = promisify(client.get).bind(client);
 
             return getAsync(key)
@@ -284,7 +284,7 @@ class RavelloClasses {
     // updates the cache with the map data provided
     updateCache(data) {
         return new Promise((resolve, reject) => {
-            const client = redis.createClient();
+            const client = redis.createClient(6379, config.redisMaster, {password: process.env.REDIS_PASSWORD});
             const cacheMulti = client.multi();
             
             // map through the results

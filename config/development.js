@@ -2,10 +2,9 @@
 
 module.exports = {
   env: 'development',
-  aws_config: {
-    region: 'local',
-    endpoint: 'http://localhost:8000',
-  },
+  redisMaster: 'localhost',
+  redisSlave: 'localhost'
+
 };
 
 console.log('LOADED DEVELOPMENT');
