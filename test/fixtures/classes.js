@@ -3,6 +3,7 @@ module.exports.baseClasses = [
         creationTime: '1517191191851',
         modificationTime: '1531585579392',
         name: 'Cody Test Class',
+        "description": "Agility_id:1234567 ravello automation test",
         course:
         { id: '99034067-fec9-4207-b5c7-123456789098',
             name: 'Cody_Test_Class',
@@ -42,6 +43,7 @@ module.exports.baseClasses = [
         creationTime: '1517191191851',
         modificationTime: '1531585579392',
         name: 'Cody Second Test Class',
+        "description": "ravello automation test",
         course:
         { id: '99034067-fec9-4207-b5c7-098765432123',
             name: 'Cody_Test_Class',
@@ -175,3 +177,34 @@ module.exports.baseClassUsers = [
         applications
     },
 ];
+
+module.exports.cacheData = [ 
+    [ 
+        { 
+            key: '1000000000000000000/1',
+            link: 'https://access.ravellosystems.com/simple/#/1000000000000000000/apps/1000000000' 
+        },
+        { 
+            key: '1000000000000000000/2',
+            link: 'https://access.ravellosystems.com/simple/#/1000000000000000000/apps/1000000000' 
+        },
+        { 
+            key: '1000000000000000000/3',
+            link: 'https://access.ravellosystems.com/simple/#/1000000000000000000/apps/1000000000' 
+        } 
+    ],
+    [ 
+        { 
+            key: '1000000000000000000/1',
+            link: 'https://access.ravellosystems.com/simple/#/1000000000000000000/apps/1000000000' 
+        },
+        { 
+            key: '1000000000000000000/2',
+            link: 'https://access.ravellosystems.com/simple/#/1000000000000000000/apps/1000000000' 
+        },
+        { 
+            key: '1000000000000000000/3',
+            link: 'https://access.ravellosystems.com/simple/#/1000000000000000000/apps/1000000000' 
+        } 
+    ] 
+]

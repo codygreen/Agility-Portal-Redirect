@@ -109,104 +109,153 @@ class RavelloClasses {
         });
     }
 
-    // update the class description with the Agility redirect Id
-    // TODO: pass the crc32 hash in versus calculating it in this method
-    setClassRedirectId(classId = null) {
-        return new Promise((resolve, reject) => {
-            if(classId === null)
-                return reject(new Error('ERROR: setClassRedirectId requires a classId'));
+    // calculate a hash for the class
+    getHash(id = null) {
+        // if the classId is a number convert to string
+        const classId = isNaN(id) ? id : id.toString(); 
+        
+        // create a hash from the string
+        const hash = crc.crc32(classId);
 
-            // obtain class data
-            r.getClass({id: classId}).then((res) => {
-                if(!res) 
-                    return reject(new Error('ERROR setClassRedirectId: unable to get class data'));
-                   
-                // now let's add the redirect Id to the class description
-                const id = crc.crc32(res.id);
-                let body = Object.assign({ }, res);
-                body.description = `Agility_id: ${id} ${res.description}`;
-                return r.updateClass(body);
-            })
+        // log the hash for debugging 
+        console.log('hash: ' + hash);
+
+        // return the hash
+        return hash;
+    }
+
+    // update the class description with the class id
+    updateClassDescriptionWithHash(classObject = null, hash =null) {
+        return new Promise((resolve, reject) => {
+            //ensure we have the required variables
+            if(classObject === null) return reject(new Error('updateClassDescriptionWithHash requires a class object'));
+            if(hash === null) return reject(new Error('updateClassDescriptionWithHash requires a hash value'));
+            
+            let description = `Agility_id: ${hash}; `;;
+
+            // Check if the class description already has a hash
+            if(classObject.hasOwnProperty('description')) {                
+                const index = classObject.description.indexOf('Agility_id:');
+                if(index === -1) {
+                    // hash is not in the description
+                    description += classObject.description; 
+                } else {
+                    // find the end of the hash starting at the begining of the hash
+                    let end = classObject.description.indexOf(' ', index);
+                    let descriptionHash = classObject.description.substring(index, end);
+
+                    // determine if the hashes match, if so resolve
+                    if(hash === descriptionHash) {
+                        return resolve(true);
+                    } else {
+                        // replace the hash with the new hash
+                        description = classObject.description.replace(descriptionHash, hash);
+                    }
+                }
+            }
+
+            // prepare to update the description
+            let body = Object.assign({ }, classObject);
+            return r.updateClass(body)
             .then((res) => {
-                if(!res)
-                    return reject(new Error('ERROR setClassRedirectId: unable to update class description'));
-                return resolve(true);
-            }).catch((err) => {
-                return reject(err);
+                resolve(true);
+            })
+            .catch((err) => {
+                reject(err);
             });
         });
     }
 
-    // update the cache with active class data
+    // get the class students, update the description with the hash and update the cache
+    processClass(classObject = null) {
+        return new Promise((resolve, reject) => {
+            let studentPromises = [];
+            let hash = this.getHash(classObject.id);
+
+            //ensure we have the required parameters
+            if(classObject === null) return reject(new Error('updateClassDescriptionWithHash requires a class object'));
+
+            // get the students for this class
+            return this.getClassStudents(classObject.id)
+            .then((students) => {
+                // ensure there are students to process
+                if(Array.isArray(students) && students.length > 0) {
+                    // process each student
+                    students.map(student => studentPromises.push(this.processStudent(student, hash)));
+                }
+                else {
+                    // no students in this class, resolve
+                    console.error('processClass ERROR: no students found for class: '+ classObject.id);
+                    return resolve();
+                }
+                return;
+            })
+            .then(() => {
+                // update the description
+                return this.updateClassDescriptionWithHash(classObject, hash);
+            })
+            .then(() => {
+                // process each student
+                return Promise.all(studentPromises);
+            })
+            .then((res) => {
+                // class has been processed, we can resolve with the students unique key and Ravello links
+                resolve(res);
+
+            })
+            .catch((err) => {
+                reject(err);
+            });
+         });
+    }
+
+    // process the student
+    processStudent(student = null, classHash = null) {
+        return new Promise((resolve, reject) => {
+            // make sure applications are assigned to the student
+            if(Array.isArray(student.applications) && student.applications.length > 0) {
+                // extract the student number and ephemeral Access Token link
+                const studentNumber = student.lastName;
+                const link = student.applications[0].ephAccessToken.link;
+                // create the unique key for this student
+                const classIdWithStudentNumber = classHash + '/' + studentNumber;
+                resolve({
+                    key: classIdWithStudentNumber, 
+                    link: link
+                });
+            } else {
+                reject(new Error('processStudent ERROR: no applications associated with student: ' + student.id));
+            }
+        });
+    }
+
+    // process each class to gernerate a unique hash and update the cache with each students Ravello link
     processClasses() {
         return new Promise((resolve, reject) => {
-            let promises = [];
-            let classIds = [];
+            let classPromises = [];
+            let classes = [];
             let cache = new Map();
 
             // obtain active classes
             return this.getClasses(this.classesState.active)
             .then((classes) => {
-                console.log('length: ', classes.length);
                 classes.map(c => {
-                    console.log('adding to promises:');
-                    // determine class id
-                    console.log(c);
-                    console.log(typeof(c.id));
-                    // make sure the class ID is in the correct format
-                    const classId = isNaN(c.id) ? c.id : c.id.toString(); 
-                    const id = crc.crc32(classId);
-                    console.log('class id: ' + id);
-                    classIds.push(id);
-                    // update Ravello Class description with id
-                    // TODO: update Ravello Class ID
-                    promises.push(this.getClassStudents(c.id));
+                    // store the class
+                    classes.push(c);
+                    
+                    // add the class to the promise array 
+                    classPromises.push(this.processClass(c));
                 });
                 return;
             })
             .then(() => {
-                console.log('PROMISE LENGTH: ', promises.length);
-                return Promise.all(promises);
+                // process the classes
+                return Promise.all(classPromises);
             })
             .then((res) => {
-                console.log('PROMISE ALL RESULTS LENGTH:' + res.length);
-                let i = 0;
-                res.map(c => {
-                    console.log('class students:');
-                    console.log(c);
-                    if(Array.isArray(c) && c.length > 0) {
-                        // process the students in this class
-                        c.map(student => {
-                            console.log('student:');
-                            console.log(student);
-                            // make sure applications are assigned to the student
-                            if(Array.isArray(student.applications) && student.applications.length > 0) {
-                                // extract the student number and ephemeral Access Token link
-                                const studentNumber = student.lastName;
-                                const link = student.applications[0].ephAccessToken.link;
-                                console.log('student number:' + studentNumber);
-                                console.log('student link:' + link);
-                                // store the student link in the cache
-                                const classIdWithStudentNumber = classIds[i] + '/' + studentNumber;
-                                console.log('TEST CACHE: ' + classIdWithStudentNumber);
-                                cache.set(classIdWithStudentNumber, link);
-                            } else {
-                                console.error('ERROR: student applications must be an array with length > 0');
-                            }
-                        })
-                    } else {
-                        console.error('ERROR: class students  must be an array with length > 0');
-                    }
-                    console.log('cache data:');
-                    console.log(cache);
-                    // iterate the class counter
-                    i++;
-                });
-                //return resolve();
-                return true;
-            })
-            .then(() => {
-                return this.updateCache(cache);
+                console.log('RES:');
+                console.log(res);
+                return this.updateCache(res);
             })
             .then((res) => {
                 return resolve(true);
@@ -225,11 +274,17 @@ class RavelloClasses {
             const client = redis.createClient();
             const cacheMulti = client.multi();
             
+            // map through the results
+            if(Array.isArray(data) && data.length > 0) {
+                data.map(res => {
+                    res.map(({key, link}) => {
+                        console.log('TEST:' + key + ':' + link);
+                        cacheMulti.set(key, link);
+                    });
+                });
 
-            console.log('MAP ITERATE');
-            const iterator1 = data[Symbol.iterator]();
-            for(let item of iterator1) {
-                cacheMulti.set(item[0], item[1]);
+            } else {
+                reject(new Error('updateCache ERROR: expecting data to be an array of promise results'));
             }
 
             cacheMulti.exec((err, replies) => {

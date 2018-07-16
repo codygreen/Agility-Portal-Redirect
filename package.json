@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha test/unit test/integration",
     "test:unit": "mocha test/unit",
-    "test:int": "mocha test/integration"
+    "test:int": "mocha test/integration",
+    "coverage": "istanbul cover _mocha -- -R spec --recursive ./test/unit/*.test.js"
   },
   "author": "c.green@f5.com",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "chai-as-promised": "^7.1.1",
     "chai-url": "^1.0.4",
     "dotenv": "^6.0.0",
+    "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "proxyquire": "^2.0.1"
   },

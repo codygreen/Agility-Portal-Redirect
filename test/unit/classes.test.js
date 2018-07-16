@@ -20,6 +20,7 @@ RavellojsMock.config = ({username, password, domain}) => {console.log('WTF')};
 RavellojsMock.getClasses = () => {return new Promise((resolve, reject) => resolve(f.baseClasses))};
 RavellojsMock.getClassStudents = ({classId}) => {return new Promise((resolve, reject) => resolve(f.baseClassUsers))};
 RavellojsMock.updateCache = () => {return new Promise((resolve, reject) => resolve(f.baseClasses))};
+RavellojsMock.updateClass = (body) => {return new Promise((resolve, reject) => resolve(true))};
 
 describe('Unit Testing for RavelloClasses Class', function () {
     beforeEach(() => {
@@ -57,8 +58,6 @@ describe('Unit Testing for RavelloClasses Class', function () {
             password: process.env.PASSWORD,
             username: process.env.USERNAME,
         });
-
-        //return classes.getClassStudents({classId: 'asdfgh123456'}).should.eventually.be.fulfilled;
         
         let promises = [];
         return classes.getClassStudents({classId: 'asdfgh123456'})
