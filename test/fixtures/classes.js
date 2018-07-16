@@ -3,7 +3,7 @@ module.exports.baseClasses = [
         creationTime: '1517191191851',
         modificationTime: '1531585579392',
         name: 'Cody Test Class',
-        "description": "Agility_id:1234567 ravello automation test",
+        "description": "Agility_id:3848809716 ravello automation test",
         course:
         { id: '99034067-fec9-4207-b5c7-123456789098',
             name: 'Cody_Test_Class',

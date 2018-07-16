@@ -71,25 +71,19 @@ class RavelloClasses {
                     case null: {
                         // return all classes
                         return resolve(res);
-                        break;
                     }
                     case this.classesState.active: {
-                        // return classes who's state is not inaccessible
-                        // note: accessible is not a valide state in Ravello, so we add the logic here
+                        // return classes who's state is active (note, this is not an actual Ravello state)
                         const now = new Date();
                         return resolve(res.filter(c => c.endTime > now));
-                        //return resolve(res.filter(c => c.status !== this.classesState.inaccessible));
-                        break;
                     } 
                     default: {
                         // return classes who's state matches the supplied state
                         return resolve(res.filter(c => c.status === status));
-                        break;
                     }
                 };
 
             }).catch((err) => {
-                console.error('ERROR GET CLASSES: ' + err);
                 reject(err);
             });
         });
@@ -117,15 +111,12 @@ class RavelloClasses {
         // create a hash from the string
         const hash = crc.crc32(classId);
 
-        // log the hash for debugging 
-        console.log('hash: ' + hash);
-
         // return the hash
         return hash;
     }
 
     // update the class description with the class id
-    updateClassDescriptionWithHash(classObject = null, hash =null) {
+    updateClassDescriptionWithHash(classObject = null, hash = null) {
         return new Promise((resolve, reject) => {
             //ensure we have the required variables
             if(classObject === null) return reject(new Error('updateClassDescriptionWithHash requires a class object'));
@@ -142,7 +133,7 @@ class RavelloClasses {
                 } else {
                     // find the end of the hash starting at the begining of the hash
                     let end = classObject.description.indexOf(' ', index);
-                    let descriptionHash = classObject.description.substring(index, end);
+                    let descriptionHash = classObject.description.substring(index + 11, end);
 
                     // determine if the hashes match, if so resolve
                     if(hash === descriptionHash) {
@@ -173,7 +164,9 @@ class RavelloClasses {
             let hash = this.getHash(classObject.id);
 
             //ensure we have the required parameters
-            if(classObject === null) return reject(new Error('updateClassDescriptionWithHash requires a class object'));
+            if(classObject === null) {
+                return reject(new Error('processClass requires a class object'));
+            }
 
             // get the students for this class
             return this.getClassStudents(classObject.id)
@@ -253,8 +246,6 @@ class RavelloClasses {
                 return Promise.all(classPromises);
             })
             .then((res) => {
-                console.log('RES:');
-                console.log(res);
                 return this.updateCache(res);
             })
             .then((res) => {
@@ -278,7 +269,6 @@ class RavelloClasses {
             if(Array.isArray(data) && data.length > 0) {
                 data.map(res => {
                     res.map(({key, link}) => {
-                        console.log('TEST:' + key + ':' + link);
                         cacheMulti.set(key, link);
                     });
                 });
