@@ -60,6 +60,28 @@ class RavelloClasses {
         r.configure(conf);
     };
 
+    // obtain a cache entry
+    getCache(key = null) {
+        return new Promise((resolve, reject) => {
+            if(key === null) {
+                return reject(new Error('getCache ERROR: key cannot be null'));
+            }
+
+            const client = redis.createClient();
+            const getAsync = promisify(client.get).bind(client);
+
+            return getAsync(key)
+            .then((res) => {
+                client.quit();
+                resolve(res);
+            })
+            .catch((err) => {
+                client.quit();
+                reject(err);
+            });
+        });
+    }
+
     // obtain an array of classes from Ravello
     getClasses(status = null) {
         return new Promise((resolve, reject) => {

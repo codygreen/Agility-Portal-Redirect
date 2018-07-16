@@ -125,6 +125,20 @@ describe('Unit Testing for RavelloClasses Class', function () {
                 throw new Error(err);
             });
     });
+
+    it('Test getCache method', function() {
+        const classes = new RavelloClass({
+            domain: process.env.DOMAIN,
+            password: process.env.PASSWORD,
+            username: process.env.USERNAME,
+        });
+
+        return Promise.all([
+            classes.getCache().should.eventually.be.rejected,
+            classes.getCache('12345').should.eventually.be.equal(null),
+            classes.getCache('3848809716/1').should.eventually.be.equal('https://access.ravellosystems.com/simple/#/1000000000000000000/apps/1000000000')
+        ]);
+    })
 });
 
 
