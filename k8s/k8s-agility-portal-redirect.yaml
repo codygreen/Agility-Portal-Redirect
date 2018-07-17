@@ -53,6 +53,6 @@ spec:
                 name: agility-portal-redirect
                 key: redisPassword
           - name: NODE_ENV
-            value: test
+            value: production
         ports:
         - containerPort: 3000

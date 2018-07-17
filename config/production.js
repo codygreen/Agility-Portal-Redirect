@@ -2,6 +2,6 @@
 
 module.exports = {
   env: 'production',
-  redisMaster: 'redis',
-  redisSlave: 'redis'
+  redisMaster: 'redis-master.default.svc.cluster.local',
+  redisSlave: 'redis-slave.default.svc.cluster.local'
 };

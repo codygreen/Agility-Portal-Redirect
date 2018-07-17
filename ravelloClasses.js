@@ -154,9 +154,9 @@ class RavelloClasses {
                     description += classObject.description; 
                 } else {
                     // find the end of the hash starting at the begining of the hash
-                    let end = classObject.description.indexOf(' ', index);
-                    let descriptionHash = classObject.description.substring(index + 11, end);
-
+                    let end = classObject.description.indexOf(';', index);
+                    let descriptionHash = classObject.description.substring(index + 12, end);
+                    
                     // determine if the hashes match, if so resolve
                     if(hash === descriptionHash) {
                         return resolve(true);
@@ -169,6 +169,7 @@ class RavelloClasses {
 
             // prepare to update the description
             let body = Object.assign({ }, classObject);
+            body.description = description;
             return r.updateClass(body)
             .then((res) => {
                 resolve(true);

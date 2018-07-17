@@ -1,3 +1,4 @@
 node_modules
 .env
 coverage
+agility-portal-redirect-secrets.test.yaml
