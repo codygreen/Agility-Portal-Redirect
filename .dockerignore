@@ -3,3 +3,5 @@ npm-debug.log
 .env
 coverage
 agility-portal-redirect-secrets.yaml
+agility-portal-redirect-secrets.test.yaml
+agility-portal-redirect-secrets.prod.yaml
