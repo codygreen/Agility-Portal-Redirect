@@ -5,6 +5,7 @@ const expect = chai.expect;
 const chaiAsPromised = require('chai-as-promised');
 const proxyquire = require('proxyquire');
 const dotenv = require('dotenv').config();
+const RedisMock = require('redis-mock');
 
 
 chai.use(chaiAsPromised);
@@ -13,7 +14,6 @@ chai.should();
 
 const f = require('../fixtures/classes');
 let RavelloClass = null;
-
 
 let RavellojsMock = {};
 RavellojsMock.config = ({username, password, domain}) => {console.log('WTF')};
@@ -25,7 +25,10 @@ RavellojsMock.updateClass = (body) => {return new Promise((resolve, reject) => r
 describe('Unit Testing for RavelloClasses Class', function () {
     beforeEach(() => {
         RavelloClass = proxyquire('../../ravelloClasses', {
-            'ravello-js' : RavellojsMock
+            'ravello-js' : RavellojsMock,
+            'redis' : {
+                createClient: RedisMock.createClient,
+            }
         });
     });
     it('Test getClasses method', function () {
