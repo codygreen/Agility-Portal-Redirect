@@ -2,10 +2,8 @@ language: node_js
 node_js:
   - "8"
 before_install:
-  - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && \
-    chmod +x kubectl && mv kubectl /usr/local/bin/
-  - curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
-    chmod +x skaffold && mv skaffold /usr/local/bin/
+  - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/
+    curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && chmod +x skaffold && mv skaffold /usr/local/bin/
     sed -i 's/KUBE_CLUSTER_NAME/'"$KUBE_CLUSTER_NAME"'/g' /tmp/k8s/config.yaml
     sed -i 's/KUBE_CLUSTER_CERTIFICATE/'"$KUBE_CLUSTER_CERTIFICATE"'/g' /tmp/k8s/config.yaml
     sed -i 's/KUBE_CLIENT_CERTIFICATE/'"$KUBE_CLIENT_CERTIFICATE"'/g' /tmp/k8s/config.yaml
