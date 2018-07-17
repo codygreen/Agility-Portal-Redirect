@@ -1,6 +1,9 @@
+sudo: required
 language: node_js
 node_js:
   - "8"
+before_install:
+  - curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && chmod +x skaffold && sudo mv skaffold /usr/local/bin
 install:
   - npm install
 script:
