@@ -20,5 +20,7 @@ after_success:
   - sed -i 's/KUBE_CLIENT_CERTIFICATE/'"$KUBE_CLIENT_CERTIFICATE"'/g' ./k8s/config.yaml
   - sed -i 's/KUBE_CLIENT_KEY/'"$KUBE_CLIENT_KEY"'/g' ./k8s/config.yaml
   - sed -i 's/KUBE_ADMIN_PWD/'"$KUBE_ADMIN_PWD"'/g' ./k8s/config.yaml
+  - mkdir ${HOME}/.kube
+  - cp ./k8s/config.yaml ${HOME}/.kube/config
   - kubectl config use-context $KUBE_CLUSTER_NAME
   - skaffold run
