@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: agility-portal-cache-update
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: agility-portal-cache-update
+            image: byrnedo/apline-chron
+            args:
+            - "-v"
+            - "http://$(UPDATEURL)"
+            env:
+          - name: UPDATEURL
+            valueFrom:
+              secretKeyRef:
+                name: agility-portal-redirect
+                key: updateURL
+          restartPolicy: Never

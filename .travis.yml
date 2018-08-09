@@ -13,6 +13,7 @@ install:
 script:
   - npm run test:unit
 after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - cd $TRAVIS_BUILD_DIR
   - sed -i 's/KUBE_CLUSTER_NAME/'"$KUBE_CLUSTER_NAME"'/g' ./k8s/config.yaml
   - sed -i 's/KUBE_CLUSTER_CERTIFICATE/'"$KUBE_CLUSTER_CERTIFICATE"'/g' ./k8s/config.yaml

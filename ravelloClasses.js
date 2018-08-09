@@ -251,6 +251,7 @@ class RavelloClasses {
             let classPromises = [];
             let classes = [];
             let cache = new Map();
+            let hrstart = process.hrtime();
 
             // obtain active classes
             return this.getClasses(this.classesState.active)
@@ -272,7 +273,14 @@ class RavelloClasses {
                 return this.updateCache(res);
             })
             .then((res) => {
-                return resolve(true);
+                // return resolve(true);
+                let hrend = process.hrtime(hrstart);
+
+                let payload = {
+                    count: classPromises.length,
+                    executionTime: `${hrend[0]} seconds`,
+                };
+                return resolve(payload);
             })
             .catch((err) => {
                 return reject(err);

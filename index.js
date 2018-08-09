@@ -4,6 +4,9 @@ const RavelloClass = require('./ravelloClasses');
 
 const app = express();
 
+// DEBUG
+console.log('DOMAIN:' + process.env.DOMAIN);
+
 app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -40,6 +43,7 @@ app.post('/redirect', (req, res) => {
 })
 
 app.get(`/${process.env.DOMAIN}/update`, (req, res) => {
+// app.get(`/test/update`, (req, res) => {
     const classes = new RavelloClass({
         domain: process.env.DOMAIN,
         password: process.env.PASSWORD,

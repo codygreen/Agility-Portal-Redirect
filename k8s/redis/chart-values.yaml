@@ -5,7 +5,11 @@ image:
   registry: docker.io
   repository: bitnami/redis
   tag: 4.0.10-debian-9
-  pullPolicy: IfNotPresent
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -40,16 +44,18 @@ metrics:
     ##
     # pullSecrets:
     #   - myRegistrKeySecretName
+
   ## Metrics exporter labels and tolerations for pod assignment
   # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
   # tolerations: []
+
   ## Metrics exporter pod Annotation and Labels
   # podLabels: {}
 
 networkPolicy:
   ## Enable creation of NetworkPolicy resources.
   ##
-  enabled: true
+  enabled: false
 
   ## The Policy model to apply. When set to false, only pods with the correct
   ## client label will have network access to the port Redis is listening
@@ -57,6 +63,30 @@ networkPolicy:
   ## (with the correct destination port).
   ##
   # allowExternal: true
+
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: false
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: false
+
+  role:
+    ## Rules to create. It follows the role specification
+    # rules:
+    #  - apiGroups:
+    #    - extensions
+    #    resources:
+    #      - podsecuritypolicies
+    #    verbs:
+    #      - use
+    #    resourceNames:
+    #      - gce.unprivileged
+    rules: []
 
 ## Redis password (both master and slave)
 ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
@@ -66,6 +96,13 @@ usePassword: true
 password:
 ## Use existing secret (ignores previous password)
 # existingSecret:
+
+## Persist data to a persistent volume
+persistence: {}
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  # existingClaim:
 
 ##
 ## Redis Master parameters
@@ -94,7 +131,7 @@ master:
   ## Can be used to disable Redis commands for security reasons.
   ## ref: https://github.com/bitnami/bitnami-docker-redis#disabling-redis-commands
   ##
-  ## disableCommands: "FLUSHDB,FLUSHALL"
+  disableCommands: "FLUSHDB,FLUSHALL"
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -107,6 +144,11 @@ master:
   #   requests:
   #     memory: 256Mi
   #     cpu: 100m
+  ## Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  # schedulerName:
+
 
   ## Redis Master Liveness Probe
   livenessProbe:
@@ -130,6 +172,8 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
   # tolerations: []
+  ## Redis Master pod/node affinity/anti-affinity
+  affinity: {}
   ## Redis Master pod annotations
   podAnnotations: {}
   ## Redis Master Service properties
@@ -183,6 +227,7 @@ master:
     ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
     # rollingUpdatePartition:
 
+
 ##
 ## Redis Slave properties
 ## Note: serviceType and service are mandatory parameters
@@ -191,7 +236,7 @@ master:
 slave:
   ## Slave Service properties
   service:
-    ## Redis Slave Service type
+    ##  Redis Slave Service type
     type: ClusterIP
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
@@ -204,8 +249,6 @@ slave:
     ##
     annotations: {}
     loadBalancerIP:
-
-  ## Redis slave optional overrides
 
   ## Redis port
   # port: 6379
@@ -245,6 +288,11 @@ slave:
   ## Redis slave labels and tolerations for pod assignment
   # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
   # tolerations: []
+
+  ## Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  # schedulerName:
 
   ## Redis slave pod Annotation and Labels
   # podLabels: {}
