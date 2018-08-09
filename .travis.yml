@@ -22,6 +22,6 @@ after_success:
   - sed -i 's/KUBE_CLIENT_CERTIFICATE/'"$KUBE_CLIENT_CERTIFICATE"'/g' config
   - sed -i 's/KUBE_CLIENT_KEY/'"$KUBE_CLIENT_KEY"'/g' config
   - sed -i 's/KUBE_ADMIN_PWD/'"$KUBE_ADMIN_PWD"'/g' config
-  
   - kubectl config use-context $KUBE_CLUSTER_NAME
+  - cd $TRAVIS_BUILD_DIR
   - skaffold run
