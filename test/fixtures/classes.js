@@ -11,7 +11,7 @@ module.exports.baseClasses = [
             deleted: false },
         optimizationLevel: 'COST_OPTIMIZED',
         startTime: '1531616400000',
-        endTime: '1534129200000',
+        endTime: '2534129200000',
         studentCount: '2',
         blueprints:
         [ { id: '10000000',
@@ -51,7 +51,7 @@ module.exports.baseClasses = [
             deleted: false },
         optimizationLevel: 'COST_OPTIMIZED',
         startTime: '1531616400000',
-        endTime: '1534129200000',
+        endTime: '2534129200000',
         studentCount: '2',
         blueprints:
         [ { id: '10000000',

@@ -30,7 +30,7 @@
     "crc": "^3.5.0",
     "express": "^4.16.3",
     "pug": "^2.0.3",
-    "ravello-js": "codygreen/ravello-js",
+    "ravello-js": "github:codygreen/ravello-js",
     "redis": "^2.8.0",
     "winston": "^3.0.0"
   }

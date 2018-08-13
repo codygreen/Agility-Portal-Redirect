@@ -86,6 +86,8 @@ class RavelloClasses {
     getClasses(status = null) {
         return new Promise((resolve, reject) => {
             r.getClasses().then((res) => {
+                // console.log('RAVELLO TEST GETCLASSES:');
+                // console.log(res);
                 
                 // process classes for the desired status
                 let payload = [];

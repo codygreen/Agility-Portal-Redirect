@@ -13,10 +13,11 @@ chai.use(require('chai-url'));
 chai.should();
 
 const f = require('../fixtures/classes');
+
 let RavelloClass = null;
 
 let RavellojsMock = {};
-RavellojsMock.config = ({username, password, domain}) => {console.log('WTF')};
+RavellojsMock.config = ({username, password, domain}) => {};
 RavellojsMock.getClasses = () => {return new Promise((resolve, reject) => resolve(f.baseClasses))};
 RavellojsMock.getClassStudents = ({classId}) => {return new Promise((resolve, reject) => resolve(f.baseClassUsers))};
 RavellojsMock.updateCache = () => {return new Promise((resolve, reject) => resolve(f.baseClasses))};
@@ -35,7 +36,7 @@ describe('Unit Testing for RavelloClasses Class', function () {
         expect(process.env.DOMAIN).to.not.equal(undefined);
         expect(process.env.PASSWORD).to.not.equal(undefined);
         expect(process.env.USERNAME).to.not.equal(undefined);
-        
+
         (function () {
             const classes = new RavelloClass();
         }).should.throw(Error);
@@ -95,8 +96,7 @@ describe('Unit Testing for RavelloClasses Class', function () {
         return classes.getClassStudents({classId: 'asdfgh123456'})
             .then((res) => {
                 res.should.be.equal(f.baseClassUsers);
-                expect(res[0].applications[0].ephAccessToken.link).to.contain.path('/simple/')
-                
+                expect(res[0].applications[0].ephAccessToken.link).to.contain.path('/simple/');  
             });
     });
 

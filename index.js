@@ -4,9 +4,6 @@ const RavelloClass = require('./ravelloClasses');
 
 const app = express();
 
-// DEBUG
-console.log('DOMAIN:' + process.env.DOMAIN);
-
 app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
