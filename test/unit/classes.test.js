@@ -60,7 +60,7 @@ describe('Unit Testing for RavelloClasses Class', function () {
         });
 
         return Promise.all([
-            //classes.getClasses(classes.classesState.active).should.eventually.have.length(2),
+            classes.getClasses(classes.classesState.active).should.eventually.have.length(2),
             classes.getClasses(classes.classesState.active).should.eventually.deep.include(f.baseClasses[1]),
             classes.getClasses(classes.classesState.inaccessible).should.eventually.have.length(1),
             classes.getClasses(classes.classesState.inaccessible).should.eventually.deep.include(f.baseClasses[2]),
