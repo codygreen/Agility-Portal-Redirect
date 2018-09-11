@@ -301,9 +301,11 @@ class RavelloClasses {
             // map through the results
             if(Array.isArray(data) && data.length > 0) {
                 data.map(res => {
-                    res.map(({key, link}) => {
-                        cacheMulti.set(key, link);
-                    });
+                    if(res) {
+                        res.map(({key, link}) => {
+                            cacheMulti.set(key, link);
+                        });
+                    }
                 });
 
             } else {
